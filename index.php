@@ -46,7 +46,26 @@
     </nav>
     <div class="container pb-4">
         <div class="page-home page-oyp">
-
+            <div class="row">
+                <script>
+                    var html = ''
+                    var text = ['影片中心', '文字小说', '图集中心', '有声小说']
+                    var imgs = ['img/video.svg', 'img/book.svg', 'img/photo.svg', 'img/audio.svg']
+                    text.forEach((item, index) => {
+                        html += `<div class="col-lg-3 col-6 mb-3 ${index % 2 ? 'pl-1 pl-sm-3' : 'pr-1 pr-sm-3'}">
+                                    <div class="border rounded shadow-sm py-2 item_uasgw">
+                                        <div class="media align-items-center justify-content-center">
+                                            <img src="${imgs[index]}" class="mr-2 mr-sm-3" width="40" height="40">
+                                            <div class="">
+                                                <h5 class="my-0">${item}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`
+                    })
+                    document.write(html)
+                </script>
+            </div>
         </div>
         <div class="page-fileList page-oyp">
             2
