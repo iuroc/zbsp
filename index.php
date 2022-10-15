@@ -1,6 +1,6 @@
 <?php require 'config.php'; ?>
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
@@ -21,7 +21,7 @@
     <script src="js/index.js?<?php echo time(); ?>"></script>
 </head>
 
-<body class="fade user-select-none">
+<body class="user-select-none">
     <nav class="navbar navbar-expand-sm navbar-light bg-light shadow-sm sticky-top mb-3 mb-sm-4">
         <a class="navbar-brand" href="#"><?php echo $config['title'] ?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,17 +30,23 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item nav-active-home">
-                    <a class="nav-link" href="#/">文件上传</a>
+                    <a class="nav-link" href="#/">主页</a>
                 </li>
-                <li class="nav-item nav-active-fileList">
-                    <a class="nav-link" href="#/fileList">文件列表</a>
+                <li class="nav-item nav-active-video">
+                    <a class="nav-link" href="#/video">影片</a>
+                </li>
+                <li class="nav-item nav-active-book">
+                    <a class="nav-link" href="#/book">小说</a>
+                </li>
+                <li class="nav-item nav-active-book">
+                    <a class="nav-link" href="#/book">图片</a>
                 </li>
             </ul>
         </div>
     </nav>
     <div class="container pb-4">
         <div class="page-home page-oyp">
-            1
+
         </div>
         <div class="page-fileList page-oyp">
             2
