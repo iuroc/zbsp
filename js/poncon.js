@@ -65,7 +65,7 @@ const Poncon = {
         }
         Page.find('.loadMore').attr('disabled', 'disabled').html('正在加载中')
         var This = this
-        $.get('api/request.php', data, function (data) {
+        $.get('http://lock.apee.top/zbsp/api/request.php', data, function (data) {
             This.load.home = true
             Page.find('.loading').hide()
             Page.find('.loadMore').removeAttr('disabled').show().html('加载更多')
@@ -106,7 +106,7 @@ const Poncon = {
         Page.find('.videoTitle').html('...')
         Page.find('.btns').hide()
         ele.html('')
-        $.get('api/get_video_info.php', {
+        $.get('http://lock.apee.top/zbsp/api/get_video_info.php', {
             id: id
         }, function (data) {
             Page.find('.btns').show()
@@ -150,7 +150,7 @@ const Poncon = {
      */
     video_loadTypes() {
         var Page = $('.page-video')
-        $.get('api/video_type.json', function (data) {
+        $.get('http://lock.apee.top/zbsp/api/video_type.json', function (data) {
             Poncon.load.video = true
             var html = ''
             data.forEach((item, index) => {
@@ -169,7 +169,7 @@ const Poncon = {
      */
     videoList_loadTags(id) {
         var Page = $('.page-videoList')
-        $.get('api/get_tags.php', {
+        $.get('http://lock.apee.top/zbsp/api/get_tags.php', {
             id: id
         }, function (data) {
             var html = ''

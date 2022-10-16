@@ -13,7 +13,11 @@ $yuanma = file_get_contents($domain . '/web/video-' . $id . '.html', false, stre
         'method' => 'GET',
         'timeout' => 900,
         'content' => ''
-    ]
+    ],
+    'ssl' => [
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+    ],
 ]));
 preg_match('/<ul class="clearfix">(.*?)<\/ul>/s', $yuanma, $matches);
 preg_match_all('/<li.*?>(.*?)</s', $matches[1], $matches);

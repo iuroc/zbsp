@@ -22,4 +22,8 @@ echo file_get_contents($domain . $path, false, stream_context_create([
         'content' => http_build_query($_GET),
         'timeout' => 900
     ],
+    'ssl' => [
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+    ],
 ]));
