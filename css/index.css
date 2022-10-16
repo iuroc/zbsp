@@ -5,13 +5,15 @@
 
 
 .nav_listItem,
-.listItem {
+.listItem,
+.typeListItem {
     cursor: pointer;
     transition: all .2s;
 }
 
 .nav_listItem:hover,
-.listItem:hover {
+.listItem:hover,
+.typeListItem:hover {
     box-shadow: 2px 2px 15px 5px rgba(0, 0, 0, 0.2) !important;
 }
 
@@ -38,6 +40,24 @@
     left: 0;
     flex-direction: column;
     z-index: -1;
+}
+
+.page-videoList .tabs::-webkit-scrollbar {
+    height: 5px;
+    background: white;
+}
+
+.page-videoList .tabs {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    -ms-overflow-style: none;
+    padding-bottom: 2px;
+}
+
+.page-videoList .tabs::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 3px;
+    height: 100px;
 }
 
 @media (max-width: 768px) {
@@ -74,4 +94,13 @@
     .listItem .clearfix {
         font-size: 80%;
     }
+
+    .videoTypeList .col_left {
+        padding-right: 8px;
+    }
+
+    .videoTypeList .col_right {
+        padding-left: 8px;
+    }
+
 }

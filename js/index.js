@@ -13,9 +13,8 @@ $(document).ready(function () {
         $('.page-oyp').css('display', 'none')
         var Page = $('.page-' + target)
         Page.css('display', 'block')
-        // 控制侧边选项卡阴影
-        // $('.oyp-action, .oyp-action-sm').removeClass('oyp-active')
-        // $('.tab-' + target).addClass('oyp-active')
+        $('.nav-item').removeClass('active')
+        $('.nav-active-' + target).addClass('active')
         if (target == 'home') {
             history.replaceState({}, null, './')
             document.title = '主页 - ' + Poncon.title
@@ -30,6 +29,20 @@ $(document).ready(function () {
             } else {
                 document.title = Poncon.data.play.title + ' - ' + Poncon.title
             }
+        } else if (target == 'video') {
+            document.title = '影片中心 - ' + Poncon.title
+            if (!Poncon.load.video) {
+                Poncon.video_loadTypes()
+            }
+        } else if (target == 'book') {
+
+        } else if (target == 'photo') {
+
+        } else if (target == 'audio') {
+
+        } else if (target == 'videoList') {
+            var id = hash[2]
+            Poncon.videoList_loadTags(id)
         } else {
             location.hash = ''
         }

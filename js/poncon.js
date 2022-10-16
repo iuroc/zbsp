@@ -12,7 +12,7 @@ const Poncon = {
     },
     load: {}, // 页面初始化加载完成情况，pageName: true/false
     tempTitle: {}, // 用于必要时记录页面标题
-    request: $.get('api/empty.php'),
+    // request: $.get('api/empty.php'),
     /**
      * 获取存储值
      * @param {string} key 键名
@@ -65,8 +65,7 @@ const Poncon = {
         }
         Page.find('.loadMore').attr('disabled', 'disabled').html('正在加载中')
         var This = this
-        this.request.abort()
-        this.request = $.get('api/request.php', data, function (data) {
+        $.get('api/request.php', data, function (data) {
             This.load.home = true
             Page.find('.loading').hide()
             Page.find('.loadMore').removeAttr('disabled').show().html('加载更多')
@@ -104,11 +103,13 @@ const Poncon = {
         var This = this
         var Page = $('.page-play')
         var ele = Page.find('.video_box .embed-responsive')
+        Page.find('.videoTitle').html('...')
+        Page.find('.btns').hide()
         ele.html('')
-        this.request.abort()
-        this.request = $.get('api/get_video_info.php', {
+        $.get('api/get_video_info.php', {
             id: id
         }, function (data) {
+            Page.find('.btns').show()
             This.load.play = true
             document.title = data.title + ' - ' + This.title
             This.data.play.title = data.title
@@ -143,5 +144,40 @@ const Poncon = {
         var Modal = $('.downloadVideoInfo')
         console.log(Modal);
         Modal.modal('show')
+    },
+    /**
+     * 加载视频分类列表
+     */
+    video_loadTypes() {
+        var Page = $('.page-video')
+        $.get('api/video_type.json', function (data) {
+            Poncon.load.video = true
+            var html = ''
+            data.forEach((item, index) => {
+                html += `<div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4 ${index % 2 ? 'col_right' : 'col_left'}">
+                            <div class="media typeListItem rounded shadow-sm border py-2 align-items-center justify-content-center" onclick="location.hash='/videoList/${item.id}'">
+                                <img src="img/video.svg" class="mr-2 mr-sm-3" width="32" height="32">
+                            ${item.name}
+                            </div>
+                        </div>`
+            })
+            Page.find('.videoTypeList').html(html)
+        })
+    },
+    /**
+     * 获取标签列表
+     */
+    videoList_loadTags(id) {
+        var Page = $('.page-videoList')
+        $.get('api/get_tags.php', {
+            id: id
+        }, function (data) {
+            var html = ''
+            data.tags.forEach(item => {
+                html += `<div class="btn mr-2 btn-light border tabItem">${item}</div>`
+            })
+            Page.find('.tabs').html(html)
+            $(Page.find('.tabs .tabItem')[0]).removeClass('btn-light').addClass('btn-secondary')
+        })
     }
 }

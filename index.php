@@ -23,7 +23,7 @@
 </head>
 
 <body class="user-select-none">
-    <nav class="navbar navbar-expand-sm navbar-light bg-light shadow-sm sticky-top mb-3 mb-sm-4">
+    <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm sticky-top mb-3 mb-sm-4">
         <a class="navbar-brand" href="#"><?php echo $config['title'] ?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -39,10 +39,17 @@
                 <li class="nav-item nav-active-book">
                     <a class="nav-link" href="#/book">小说</a>
                 </li>
-                <li class="nav-item nav-active-book">
-                    <a class="nav-link" href="#/book">图片</a>
+                <li class="nav-item nav-active-photo">
+                    <a class="nav-link" href="#/photo">图片</a>
+                </li>
+                <li class="nav-item nav-active-audio">
+                    <a class="nav-link" href="#/audio">有声</a>
                 </li>
             </ul>
+            <div class="form-inline my-2 my-sm-0">
+                <input class="form-control mr-md-2" type="search" placeholder="请输入关键词" aria-label="Search">
+                <button class="btn btn-primary my-2 my-sm-0" type="submit">搜索</button>
+            </div>
         </div>
     </nav>
     <div class="container pb-4">
@@ -52,9 +59,10 @@
                     var html = ''
                     var text = ['影片中心', '文字小说', '图集中心', '有声小说']
                     var imgs = ['img/video.svg', 'img/book.svg', 'img/photo.svg', 'img/audio.svg']
+                    var targets = ['video', 'book', 'photo', 'audio']
                     text.forEach((item, index) => {
                         html += `<div class="col-lg-3 col-6 mb-3 ${index % 2 ? 'pl-1 pl-sm-3' : 'pr-1 pr-sm-3'}">
-                                    <div class="border rounded shadow-sm py-2 nav_listItem">
+                                    <div class="border rounded shadow-sm py-2 nav_listItem" onclick="location.hash='/${targets[index]}'">
                                         <div class="media align-items-center justify-content-center">
                                             <img src="${imgs[index]}" class="mr-2 mr-sm-3" width="40" height="40">
                                             <div class="h5 my-0">${item}</div>
@@ -67,7 +75,7 @@
             </div>
             <div class="mb-4 d-flex align-items-center">
                 <h5 class="mb-0">视频推荐</h5>
-                <div class="dropdown ml-auto ml-sm-3">
+                <div class="dropright ml-auto ml-sm-3">
                     <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
                         最新发布
                     </button>
@@ -87,6 +95,11 @@
             <button class="btn btn-primary loadMore" style="display: none;">加载更多</button>
         </div>
         <div class="page-video page-oyp">
+            <h5 class="mb-4">视频分类</h5>
+            <div class="row videoTypeList"></div>
+        </div>
+        <div class="page-videoList page-oyp">
+            <div class="tabs text-nowrap"></div>
         </div>
         <div class="page-play page-oyp">
             <div class="video_box border shadow-sm mb-4 overflow-hidden">
