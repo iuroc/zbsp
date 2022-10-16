@@ -8,7 +8,7 @@
 .listItem,
 .typeListItem {
     cursor: pointer;
-    transition: all .2s;
+    transition: all .3s;
 }
 
 .nav_listItem:hover,
@@ -43,7 +43,7 @@
 }
 
 .page-videoList .tabs::-webkit-scrollbar {
-    height: 5px;
+    height: 0;
     background: white;
 }
 

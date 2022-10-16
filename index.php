@@ -99,12 +99,27 @@
             <div class="row videoTypeList"></div>
         </div>
         <div class="page-videoList page-oyp">
-            <div class="text-center loading">
+            <div class="mb-4 d-flex align-items-center topbox" style="display: none;">
+                <h5 class="mb-0 videoTypeName"></h5>
+                <div class="dropright ml-auto ml-sm-3">
+                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                        最新发布
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" onclick="Poncon.videoList_changeSort(1)">最新发布</a>
+                        <a class="dropdown-item" onclick="Poncon.videoList_changeSort(2)">最高热度</a>
+                        <a class="dropdown-item" onclick="Poncon.videoList_changeSort(3)">最多收藏</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tabs text-nowrap"></div>
+            <div class="row video_list"></div>
+            <div class="text-center loading mt-5">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div class="tabs text-nowrap"></div>
+            <button class="btn btn-primary loadMore" style="display: none;">加载更多</button>
         </div>
         <div class="page-play page-oyp">
             <div class="video_box border shadow-sm mb-4 overflow-hidden">
@@ -121,7 +136,7 @@
                 <div class="col-xl-7 col-lg-8 col-md-9">
                     <div class="btns row">
                         <div class="col-sm-3 col-6 mb-3 pr-2">
-                            <button class="btn btn-outline-secondary btn-block" onclick="Poncon.play_reload()">刷新播放</button>
+                            <button class="btn btn-secondary btn-block" onclick="Poncon.play_reload()">刷新播放</button>
                         </div>
                         <div class="col-sm-3 col-6 mb-3 pl-2 pr-sm-2">
                             <button class="btn btn-outline-danger btn-block" onclick="Poncon.play_reload(0)">线路一</button>
@@ -130,12 +145,11 @@
                             <button class="btn btn-outline-success btn-block" onclick="Poncon.play_reload(1)">线路二</button>
                         </div>
                         <div class="col-sm-3 col-6 mb-3 pl-2">
-                            <button class="btn btn-outline-info btn-block" onclick="Poncon.play_downloadInfo()">下载视频</button>
+                            <button class="btn btn-info btn-block" onclick="Poncon.play_downloadInfo()">下载视频</button>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <div class="modal fade downloadVideoInfo" data-keyboard="false" tabindex="-1">

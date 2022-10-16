@@ -42,8 +42,10 @@ $(document).ready(function () {
 
         } else if (target == 'videoList') {
             var id = hash[2]
-            Poncon.videoList_loadTags(id)
-            Poncon.videoList_loadVideoList(id, '全部', 1, 24)
+            if (!Poncon.load.videoList) {
+                Poncon.videoList_loadTags(id)
+                Poncon.videoList_loadVideoList(id, '全部', 1, 24)
+            }
         } else {
             location.hash = ''
         }
@@ -54,4 +56,18 @@ $(document).ready(function () {
         router(hash)
     })
     new ClipboardJS('.copybtn')
+    $('.page-videoList .tabs')[0].addEventListener('wheel', function (event) {
+        event.preventDefault()
+        if (Poncon.data.videoList.scroll_start) {
+            return
+        }
+        Poncon.data.videoList.scroll_start = true
+        $(this).animate({
+            scrollLeft: $(this).scrollLeft() + 200 * (event.deltaY > 0 ? 1 : -1)
+        }, 300)
+        setTimeout(() => {
+            Poncon.data.videoList.scroll_start = false
+        }, 300)
+        // this.scrollLeft += event.deltaY
+    })
 })

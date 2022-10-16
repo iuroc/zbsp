@@ -8,7 +8,8 @@ const Poncon = {
         },
         video: {},
         photo: {},
-        audio: {}
+        audio: {},
+        videoList: {}
     },
     load: {}, // 页面初始化加载完成情况，pageName: true/false
     tempTitle: {}, // 用于必要时记录页面标题
@@ -68,32 +69,45 @@ const Poncon = {
         $.get('http://lock.apee.top/zbsp/api/request.php', data, function (data) {
             This.load.home = true
             Page.find('.loading').hide()
-            Page.find('.loadMore').removeAttr('disabled').show().html('加载更多')
             var list = data.videos || []
-            var html = ''
-            list.forEach(item => {
-                html += `<div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                            <div class="border rounded shadow-sm listItem h-100 overflow-hidden" onclick="Poncon.load.play=false;location.hash='/play/${item.id}'">
-                                <div class="embed-responsive embed-responsive-16by9 overflow-hidden">
-                                    <div class="embed-responsive-item">
-                                        <img class="w-100" src="${item.coverimg}" class="card-img-top" alt="${item.title}">
-                                    </div>
-                                </div>
-                                <div class="p-2 p-sm-3 box_iasas">
-                                    <div class="mb-2 oyp-limit-line title_askjfhj text-justify">${item.title}</div>
-                                    <div class="clearfix text-muted">
-                                        <div class="float-left">${item.updatedate.split(' ')[0]}</div>
-                                        <div class="float-right">${item.viewcount > 1E4 ? (item.viewcount / 1E4).toFixed(1) + '万' : item.viewcount}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`
-            })
+            if (list.length > 0) {
+                Page.find('.loadMore').removeAttr('disabled').show().html('加载更多')
+            } else {
+                Page.find('.loadMore').html('已经到底了')
+            }
+            var html = This.make_listHtml(list)
             Page.find('.video_list').append(html)
             Page.find('.loadMore').unbind().click(function () {
                 This.home_loadVideoList(++page, pageSize, sort)
             })
         })
+    },
+    /**
+     * 生成视频列表HTML代码
+     * @param {} list 列表
+     * @returns 
+     */
+    make_listHtml(list) {
+        var html = ''
+        list.forEach(item => {
+            html += `<div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                        <div class="border rounded shadow-sm listItem h-100 overflow-hidden" onclick="Poncon.load.play=false;location.hash='/play/${item.id}'">
+                            <div class="embed-responsive embed-responsive-16by9 overflow-hidden">
+                                <div class="embed-responsive-item">
+                                    <img class="w-100" src="${item.coverimg}" class="card-img-top" alt="${item.title}">
+                                </div>
+                            </div>
+                            <div class="p-2 p-sm-3 box_iasas">
+                                <div class="mb-2 oyp-limit-line title_askjfhj text-justify">${item.title}</div>
+                                <div class="clearfix text-muted">
+                                    <div class="float-left">${item.updatedate.split(' ')[0]}</div>
+                                    <div class="float-right">${item.viewcount > 1E4 ? (item.viewcount / 1E4).toFixed(1) + '万' : item.viewcount}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+        })
+        return html
     },
     /**
      * 加载视频播放页
@@ -155,7 +169,7 @@ const Poncon = {
             var html = ''
             data.forEach((item, index) => {
                 html += `<div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4 ${index % 2 ? 'col_right' : 'col_left'}">
-                            <div class="media typeListItem rounded shadow-sm border py-2 align-items-center justify-content-center" onclick="location.hash='/videoList/${item.id}'">
+                            <div class="media typeListItem rounded shadow-sm border py-2 align-items-center justify-content-center" onclick="Poncon.load.videoList=false;location.hash='/videoList/${item.id}'">
                                 <img src="img/video.svg" class="mr-2 mr-sm-3" width="32" height="32">
                             ${item.name}
                             </div>
@@ -170,21 +184,31 @@ const Poncon = {
     videoList_loadTags(id) {
         var Page = $('.page-videoList')
         Page.find('.tabs').html('')
-        Page.find('.loading').show()
+        Page.find('.topbox').hide()
         $.get('http://lock.apee.top/zbsp/api/get_tags.php', {
             id: id
         }, function (data) {
-            Page.find('.loading').hide()
+            Page.find('.topbox').show()
+            Page.find('.videoTypeName').html(data.name)
             if (data.tags.length < 2) {
+                Page.find('.tabs').removeClass('mb-3')
                 return
             }
             var html = ''
             data.tags.forEach(item => {
-                html += `<div class="btn mr-2 btn-light border tabItem">${item}</div>`
+                html += `<div class="btn mr-2 btn-light border tabItem" onclick="Poncon.videoList_changeTag(this)">${item}</div>`
             })
-            Page.find('.tabs').html(html)
+            Page.find('.tabs').html(html).addClass('mb-3')
             $(Page.find('.tabs .tabItem')[0]).removeClass('btn-light').addClass('btn-secondary')
         })
+    },
+    videoList_changeTag(ele) {
+        var tag = ele.innerText
+        var Page = $('.page-videoList')
+        Page.find('.tabs .tabItem').removeClass('btn-secondary').addClass('btn-light')
+        $(ele).removeClass('btn-light').addClass('btn-secondary')
+        var data = this.data.videoList
+        this.videoList_loadVideoList(data.id, tag, 1, data.pagesize, data.sort)
     },
     /**
      * 获取某一类的视频列表
@@ -193,7 +217,49 @@ const Poncon = {
      * @param {*} page 页码
      * @param {*} pageSize 每页加载数量
      */
-    videoList_loadVideoList(id, tag, page, pageSize) {
-        
+    videoList_loadVideoList(id, tag, page, pageSize, sort) {
+        var This = this
+        var Page = $('.page-videoList')
+        if (page == 1) {
+            Page.find('.video_list').html('')
+            Page.find('.loading').show()
+            Page.find('.loadMore').hide()
+        }
+        Page.find('.loadMore').attr('disabled', 'disabled').html('正在加载中')
+        $.get('http://lock.apee.top/zbsp/api/request.php', {
+            action: 'getvideos',
+            vtype: id,
+            pageindex: page || 1,
+            pagesize: pageSize || 24,
+            tags: tag || '全部',
+            sortindex: sort || 1,
+        }, function (data) {
+            This.data.videoList.id = id
+            This.data.videoList.tag = tag
+            This.data.videoList.page = page
+            This.data.videoList.pageSize = pageSize
+            This.data.videoList.sort = sort
+            This.load.videoList = true
+            Page.find('.loading').hide()
+            var list = data.videos || []
+            if (list.length > 0) {
+                Page.find('.loadMore').removeAttr('disabled').show().html('加载更多')
+            } else {
+                Page.find('.loadMore').html('已经到底了')
+            }
+            var html = This.make_listHtml(list)
+            Page.find('.video_list').append(html)
+            Page.find('.loadMore').unbind().click(function () {
+                This.videoList_loadVideoList(id, tag, ++page, pageSize, sort)
+            })
+        })
+    },
+    /**
+     * 排序
+     * @param {*} sort 1 2 3
+     */
+    videoList_changeSort(sort) {
+        var data = this.data.videoList
+        this.videoList_loadVideoList(data.id, data.tag, 1, data.pagesize, sort)
     }
 }
