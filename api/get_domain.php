@@ -4,13 +4,17 @@
  * 
  * 获取最新域名
  */
-function main()
+function get_domain()
 {
     stream_context_set_default([
-        'http' => [
-            'proxy' => 'tcp://127.0.0.1:7890',
-            'request_fulluri' => True
-        ]
+        // 'http' => [
+        //     'proxy' => 'tcp://127.0.0.1:7890',
+        //     'request_fulluri' => True
+        // ],
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+        ],
     ]);
     // 初始化JSON文件
     if (!file_exists('domain_info.json')) {
@@ -36,7 +40,5 @@ function main()
         }
         file_put_contents('domain_info.json', json_encode($domain_info));
     }
-    echo $domain_info['domain'];
+    return $domain_info['domain'];
 }
-
-main();

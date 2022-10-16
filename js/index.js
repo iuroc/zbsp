@@ -3,6 +3,7 @@ $(document).ready(function () {
     // Poncon.login(true)
     router(location.hash)
     function router(hash) {
+        scrollTo(0, 0)
         hash = hash.split('/')
         var target = hash[1]
         // target非法状态
@@ -18,6 +19,17 @@ $(document).ready(function () {
         if (target == 'home') {
             history.replaceState({}, null, './')
             document.title = '主页 - ' + Poncon.title
+            if (!Poncon.load.home) {
+                Poncon.home_loadVideoList()
+            }
+        } else if (target == 'play') {
+            document.title = '视频播放器 - ' + Poncon.title
+            if (!Poncon.load.play) {
+                var id = hash[2]
+                Poncon.play_loadVideo(id)
+            } else {
+                document.title = Poncon.data.play.title + ' - ' + Poncon.title
+            }
         } else {
             location.hash = ''
         }
@@ -27,4 +39,5 @@ $(document).ready(function () {
         var hash = new URL(event.newURL).hash
         router(hash)
     })
+    new ClipboardJS('.copybtn')
 })
