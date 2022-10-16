@@ -99,6 +99,11 @@
             <div class="row videoTypeList"></div>
         </div>
         <div class="page-videoList page-oyp">
+            <div class="text-center loading">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
             <div class="tabs text-nowrap"></div>
         </div>
         <div class="page-play page-oyp">

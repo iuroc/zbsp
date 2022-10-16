@@ -169,9 +169,15 @@ const Poncon = {
      */
     videoList_loadTags(id) {
         var Page = $('.page-videoList')
+        Page.find('.tabs').html('')
+        Page.find('.loading').show()
         $.get('http://lock.apee.top/zbsp/api/get_tags.php', {
             id: id
         }, function (data) {
+            Page.find('.loading').hide()
+            if (data.tags.length < 2) {
+                return
+            }
             var html = ''
             data.tags.forEach(item => {
                 html += `<div class="btn mr-2 btn-light border tabItem">${item}</div>`
@@ -179,5 +185,15 @@ const Poncon = {
             Page.find('.tabs').html(html)
             $(Page.find('.tabs .tabItem')[0]).removeClass('btn-light').addClass('btn-secondary')
         })
+    },
+    /**
+     * 获取某一类的视频列表
+     * @param {*} id 分类ID
+     * @param {*} tag 标签名称
+     * @param {*} page 页码
+     * @param {*} pageSize 每页加载数量
+     */
+    videoList_loadVideoList(id, tag, page, pageSize) {
+        
     }
 }

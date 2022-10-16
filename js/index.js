@@ -43,6 +43,7 @@ $(document).ready(function () {
         } else if (target == 'videoList') {
             var id = hash[2]
             Poncon.videoList_loadTags(id)
+            Poncon.videoList_loadVideoList(id, '全部', 1, 24)
         } else {
             location.hash = ''
         }
