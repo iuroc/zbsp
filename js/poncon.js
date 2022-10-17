@@ -185,6 +185,7 @@ const Poncon = {
         var Page = $('.page-videoList')
         Page.find('.tabs').html('')
         Page.find('.topbox').hide()
+        Page.find('.videoTypeName').html('...')
         $.get('http://lock.apee.top/zbsp/api/get_tags.php', {
             id: id
         }, function (data) {
