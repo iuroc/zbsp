@@ -192,14 +192,14 @@ const Poncon = {
             Page.find('.topbox').show()
             Page.find('.videoTypeName').html(data.name)
             if (data.tags.length < 2) {
-                Page.find('.tabs').removeClass('mb-3')
+                Page.find('.tabs').removeClass('mb-4')
                 return
             }
             var html = ''
             data.tags.forEach(item => {
                 html += `<div class="btn mr-2 btn-light border tabItem" onclick="Poncon.videoList_changeTag(this)">${item}</div>`
             })
-            Page.find('.tabs').html(html).addClass('mb-3')
+            Page.find('.tabs').html(html).addClass('mb-4')
             $(Page.find('.tabs .tabItem')[0]).removeClass('btn-light').addClass('btn-secondary')
         })
     },
@@ -262,5 +262,90 @@ const Poncon = {
     videoList_changeSort(sort) {
         var data = this.data.videoList
         this.videoList_loadVideoList(data.id, data.tag, 1, data.pagesize, sort)
+    },
+    /**
+     * 加载文字小说分类选项卡
+     */
+    book_loadBookType(id) {
+        var Page = $('.page-book')
+        $.get('api/book_type.json', function (data) {
+            var list = data || []
+            var html = ''
+            for (var i = 0; i < list.length; i++) {
+                html += `<div class="btn mr-2 btn-light border tabItem tabItem-${list[i].id}" onclick="Poncon.book_loadList(${list[i].id}, 1, 24)">${list[i].name}</div>`
+            }
+            Page.find('.tabs').html(html)
+            Page.find('.tabItem-' + id).removeClass('btn-light').addClass('btn-secondary')
+            document.title = $('.tabItem-' + id).text() + ' - ' + Poncon.title
+        })
+    },
+    /**
+     * 加载文字小说列表
+     * @param {*} id 分类ID
+     * @param {*} page 页码
+     * @param {*} pageSize 每页数量
+     */
+    book_loadList(id, page, pageSize) {
+        var Page = $('.page-book')
+        history.replaceState({}, '', '#/book/' + id)
+        Page.find('.tabs .tabItem').removeClass('btn-secondary').addClass('btn-light')
+        document.title = $('.tabItem-' + id).text() + ' - ' + Poncon.title
+        $('.tabItem-' + id).removeClass('btn-light').addClass('btn-secondary')
+        if (page == 1) {
+            Page.find('.bookList').html('')
+            Page.find('.loading').show()
+            Page.find('.loadMore').hide()
+        }
+        Page.find('.loadMore').attr('disabled', 'disabled').html('正在加载中')
+        var This = this
+        $.get('http://lock.apee.top/zbsp/api/request.php', {
+            action: 'getbooks',
+            vtype: id || 101,
+            pageindex: page || 1,
+            pagesize: pageSize || 24
+        }, function (data) {
+            Poncon.load.book = true
+            var data = Array.isArray(data.data) ? data.data : []
+            var html = ''
+            Page.find('.loading').hide()
+            if (data.length > 0) {
+                Page.find('.loadMore').removeAttr('disabled').show().html('加载更多')
+            } else {
+                data.find('.loadMore').html('已经到底了')
+            }
+            data.forEach(item => {
+                html += `<div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                            <div class="card h-100 card-body shadow-sm listItem" onclick="location.hash='/read/${item.id}'">
+                                <div class="lead mb-2">${item.title}</div>
+                                <div class="time">${item.times.split(' ')[0]}</div>
+                            </div>
+                        </div>`
+            })
+            Page.find('.bookList').append(html)
+            Page.find('.loadMore').unbind().click(function () {
+                This.book_loadList(id, ++page || 1, pageSize || 24)
+            })
+        })
+    },
+    /**
+     * 加载小说内容
+     * @param {string} id 小说ID
+     */
+    read_loadContent(id) {
+        var Page = $('.page-read')
+        Page.find('.title, .time').html('...')
+        Page.find('.content').html('正在加载中...')
+        $.get('http://lock.apee.top/zbsp/api/request.php', {
+            action: 'getbookcontent',
+            id: id
+        }, function (data) {
+            var info = data.data[0]
+            var content = info.bookcontents
+            var title = info.title
+            var time = info.times
+            Page.find('.time').html(time)
+            Page.find('.title').html(title)
+            Page.find('.content').html(content)
+        })
     }
 }

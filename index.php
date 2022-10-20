@@ -33,10 +33,10 @@
                 <li class="nav-item nav-active-home">
                     <a class="nav-link" href="#/">主页</a>
                 </li>
-                <li class="nav-item nav-active-video">
+                <li class="nav-item nav-active-video nav-active-videoList nav-active-play">
                     <a class="nav-link" href="#/video">影片</a>
                 </li>
-                <li class="nav-item nav-active-book">
+                <li class="nav-item nav-active-book nav-active-read">
                     <a class="nav-link" href="#/book">小说</a>
                 </li>
                 <li class="nav-item nav-active-photo">
@@ -150,6 +150,29 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="page-book page-oyp">
+            <div class="tabs text-nowrap mb-4"></div>
+            <div class="bookList row">
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+                    <div class="card card-body shadow-sm listItem">
+                        <div class="lead mb-2">妻子和我的朋友们</div>
+                        <div class="time">2022-10-15</div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center loading mt-5">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <button class="btn btn-primary loadMore" style="display: none;">加载更多</button>
+        </div>
+        <div class="page-read page-oyp">
+            <h3 class="title"></h3>
+            <div class="time"></div>
+            <hr>
+            <div class="content"></div>
         </div>
     </div>
     <div class="modal fade downloadVideoInfo" data-keyboard="false" tabindex="-1">

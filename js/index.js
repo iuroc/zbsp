@@ -35,7 +35,11 @@ $(document).ready(function () {
                 Poncon.video_loadTypes()
             }
         } else if (target == 'book') {
-
+            var id = hash[2] || 101
+            if (!Poncon.load.book) {
+                Poncon.book_loadBookType(id)
+                Poncon.book_loadList(id, 1, 24)
+            }
         } else if (target == 'photo') {
 
         } else if (target == 'audio') {
@@ -45,6 +49,11 @@ $(document).ready(function () {
             if (!Poncon.load.videoList) {
                 Poncon.videoList_loadTags(id)
                 Poncon.videoList_loadVideoList(id, '全部', 1, 24)
+            }
+        } else if (target == 'read') {
+            var id = hash[2] || 56089
+            if (!Poncon.load.raed) {
+                Poncon.read_loadContent(id)
             }
         } else {
             location.hash = ''
@@ -56,14 +65,14 @@ $(document).ready(function () {
         router(hash)
     })
     new ClipboardJS('.copybtn')
-    $('.page-videoList .tabs')[0].addEventListener('wheel', function (event) {
+    $('.tabs').bind('wheel', function (event) {
         event.preventDefault()
         if (Poncon.data.videoList.scroll_start) {
             return
         }
         Poncon.data.videoList.scroll_start = true
         $(this).animate({
-            scrollLeft: $(this).scrollLeft() + 200 * (event.deltaY > 0 ? 1 : -1)
+            scrollLeft: $(this).scrollLeft() + 200 * (event.originalEvent.deltaY > 0 ? 1 : -1)
         }, 300)
         setTimeout(() => {
             Poncon.data.videoList.scroll_start = false
