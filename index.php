@@ -17,6 +17,7 @@
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+    <script src="https://cdn.staticfile.org/medium-zoom/1.0.6/medium-zoom.min.js"></script>
     <link rel="stylesheet" href="css/index.css?<?php echo time(); ?>">
     <script src="js/poncon.js?<?php echo time(); ?>"></script>
     <script src="js/index.js?<?php echo time(); ?>"></script>
@@ -39,7 +40,7 @@
                 <li class="nav-item nav-active-book nav-active-read">
                     <a class="nav-link" href="#/book">小说</a>
                 </li>
-                <li class="nav-item nav-active-photo">
+                <li class="nav-item nav-active-photo nav-active-photoList">
                     <a class="nav-link" href="#/photo">图片</a>
                 </li>
                 <li class="nav-item nav-active-audio">
@@ -173,6 +174,23 @@
             <div class="time"></div>
             <hr>
             <div class="content"></div>
+        </div>
+        <div class="page-photo page-oyp">
+            <div class="photoList row"></div>
+            <div class="text-center loading mt-5">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <button class="btn btn-primary loadMore" style="display: none;">加载更多</button>
+        </div>
+        <div class="page-photoList page-oyp">
+            <div class="photoList row"></div>
+            <div class="text-center loading mt-5">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade downloadVideoInfo" data-keyboard="false" tabindex="-1">

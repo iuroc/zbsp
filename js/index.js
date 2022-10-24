@@ -41,7 +41,9 @@ $(document).ready(function () {
                 Poncon.book_loadList(id, 1, 24)
             }
         } else if (target == 'photo') {
-
+            if (!Poncon.load.photo) {
+                Poncon.photo_loadList(1, 24)
+            }
         } else if (target == 'audio') {
 
         } else if (target == 'videoList') {
@@ -54,6 +56,12 @@ $(document).ready(function () {
             var id = hash[2] || 56089
             if (!Poncon.load.raed) {
                 Poncon.read_loadContent(id)
+            }
+        } else if (target == 'photoList') {
+            var id = hash[2] || 2639
+            document.title = '查看图集 - ' + Poncon.title
+            if (Poncon.data.photoList.id != id) {
+                Poncon.photoList_loadList(id)
             }
         } else {
             location.hash = ''
@@ -79,4 +87,5 @@ $(document).ready(function () {
         }, 300)
         // this.scrollLeft += event.deltaY
     })
+
 })

@@ -9,7 +9,10 @@ const Poncon = {
         video: {},
         photo: {},
         audio: {},
-        videoList: {}
+        videoList: {},
+        photoList: {},
+        read: {},
+        book: {}
     },
     load: {}, // 页面初始化加载完成情况，pageName: true/false
     tempTitle: {}, // 用于必要时记录页面标题
@@ -66,7 +69,7 @@ const Poncon = {
         }
         Page.find('.loadMore').attr('disabled', 'disabled').html('正在加载中')
         var This = this
-        $.get('http://lock.apee.top/zbsp/api/request.php', data, function (data) {
+        $.get('api/request.php', data, function (data) {
             This.load.home = true
             Page.find('.loading').hide()
             var list = data.videos || []
@@ -120,7 +123,7 @@ const Poncon = {
         Page.find('.videoTitle').html('...')
         Page.find('.btns').hide()
         ele.html('')
-        $.get('http://lock.apee.top/zbsp/api/get_video_info.php', {
+        $.get('api/get_video_info.php', {
             id: id
         }, function (data) {
             Page.find('.btns').show()
@@ -164,7 +167,7 @@ const Poncon = {
      */
     video_loadTypes() {
         var Page = $('.page-video')
-        $.get('http://lock.apee.top/zbsp/api/video_type.json', function (data) {
+        $.get('api/video_type.json', function (data) {
             Poncon.load.video = true
             var html = ''
             data.forEach((item, index) => {
@@ -186,7 +189,7 @@ const Poncon = {
         Page.find('.tabs').html('')
         Page.find('.topbox').hide()
         Page.find('.videoTypeName').html('...')
-        $.get('http://lock.apee.top/zbsp/api/get_tags.php', {
+        $.get('api/get_tags.php', {
             id: id
         }, function (data) {
             Page.find('.topbox').show()
@@ -227,7 +230,7 @@ const Poncon = {
             Page.find('.loadMore').hide()
         }
         Page.find('.loadMore').attr('disabled', 'disabled').html('正在加载中')
-        $.get('http://lock.apee.top/zbsp/api/request.php', {
+        $.get('api/request.php', {
             action: 'getvideos',
             vtype: id,
             pageindex: page || 1,
@@ -298,7 +301,7 @@ const Poncon = {
         }
         Page.find('.loadMore').attr('disabled', 'disabled').html('正在加载中')
         var This = this
-        $.get('http://lock.apee.top/zbsp/api/request.php', {
+        $.get('api/request.php', {
             action: 'getbooks',
             vtype: id || 101,
             pageindex: page || 1,
@@ -316,7 +319,7 @@ const Poncon = {
             data.forEach(item => {
                 html += `<div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                             <div class="card h-100 card-body shadow-sm listItem" onclick="location.hash='/read/${item.id}'">
-                                <div class="lead mb-2">${item.title}</div>
+                                <div class="h5 mb-2">${item.title}</div>
                                 <div class="time">${item.times.split(' ')[0]}</div>
                             </div>
                         </div>`
@@ -335,7 +338,7 @@ const Poncon = {
         var Page = $('.page-read')
         Page.find('.title, .time').html('...')
         Page.find('.content').html('正在加载中...')
-        $.get('http://lock.apee.top/zbsp/api/request.php', {
+        $.get('api/request.php', {
             action: 'getbookcontent',
             id: id
         }, function (data) {
@@ -346,6 +349,83 @@ const Poncon = {
             Page.find('.time').html(time)
             Page.find('.title').html(title)
             Page.find('.content').html(content)
+        })
+    },
+    /**
+     * 加载图集列表
+     * @param {number} page 页码
+     * @param {number} pageSize 每页加载数量
+     */
+    photo_loadList(page, pageSize) {
+        var Page = $('.page-photo')
+        if (page == 1) {
+            Page.find('.photoList').html('')
+            Page.find('.loading').show()
+            Page.find('.loadMore').hide()
+        }
+        var This = this
+        Page.find('.loadMore').attr('disabled', 'disabled').html('正在加载中')
+        $.get('api/request.php', {
+            action: 'getphotos',
+            vtype: 11,
+            pageindex: page || 1,
+            pagesize: pageSize || 24,
+            tags: '全部'
+        }, function (data) {
+            Page.find('.loading').hide()
+            Poncon.load.photo = true
+            var list = Array.isArray(data.photos) ? data.photos : []
+            if (list.length > 0) {
+                Page.find('.loadMore').removeAttr('disabled').show().html('加载更多')
+            } else {
+                list.find('.loadMore').html('已经到底了')
+            }
+            var html = ''
+            list.forEach((item, index) => {
+                html += `<div class="col-xl-3 col-lg-4 col-6 mb-4 ${index % 2 ? 'right_hjsd' : 'left_hjsd'}">
+                            <div class="shadow-sm h-100 border rounded overflow-hidden focus_jas" onclick="location.hash='/photoList/${item.id}'">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <div class="embed-responsive-item">
+                                    <img src="${item.coverimg}" alt="${item.title}" class="w-100">
+                                </div>
+                            </div>
+                                <div class="p-3 limt-one-line">
+                                    ${item.title}
+                                </div>
+                            </div>
+                        </div>`
+            })
+            Page.find('.photoList').append(html)
+            Page.find('.loadMore').unbind().click(function () {
+                This.photo_loadList(++page || 1, pageSize || 24)
+            })
+        })
+    },
+    /**
+     * 加载图集中的图片列表
+     * @param {number} id 图集ID
+     */
+    photoList_loadList(id) {
+        var Page = $('.page-photoList')
+        Page.find('.photoList').html('')
+        Page.find('.loading').show()
+        $.get('api/request.php', {
+            action: 'getphotodetails',
+            photoid: id
+        }, function (data) {
+            var list = Array.isArray(data.data) ? data.data : []
+            Page.find('.loading').hide()
+            Poncon.data.photoList.id = id
+            var html = ''
+            list.forEach((item, index) => {
+                html += `<div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                            <div class="shadow-sm border rounded overflow-hidden focus_jas">
+                                <img src="${item.imgsrc}" data-zoomable style="width:100%">
+                            </div>
+                        </div>`
+            })
+            Page.find('.photoList').html(html)
+            mediumZoom('[data-zoomable]')
         })
     }
 }

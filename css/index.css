@@ -6,14 +6,16 @@
 
 .nav_listItem,
 .listItem,
-.typeListItem {
+.typeListItem,
+.focus_jas {
     cursor: pointer;
     transition: all .3s;
 }
 
 .nav_listItem:hover,
 .listItem:hover,
-.typeListItem:hover {
+.typeListItem:hover,
+.focus_jas:hover {
     box-shadow: 2px 2px 15px 5px rgba(0, 0, 0, 0.2) !important;
 }
 
@@ -64,6 +66,17 @@
     text-indent: 2em;
 }
 
+
+.limt-one-line {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.medium-zoom-image--opened {
+    z-index: 10000;
+}
+
 @media (max-width: 768px) {
     .listItem .embed-responsive {
         flex: 1;
@@ -99,12 +112,15 @@
         font-size: 80%;
     }
 
-    .videoTypeList .col_left {
+    .videoTypeList .col_left,
+    .left_hjsd {
         padding-right: 8px;
     }
 
-    .videoTypeList .col_right {
+    .videoTypeList .col_right,
+    .right_hjsd {
         padding-left: 8px;
     }
+
 
 }
